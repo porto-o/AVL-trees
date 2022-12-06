@@ -3,14 +3,16 @@
 #include "Elem.h"
 #include "AVL.h"
 
-void main()
+int main()
 {
-    AVL a = vacioAB();
-    EsAVL(a) ? puts("Si") : puts("No");
-    a = InsAVL(1,InsAVL(2,InsAVL(3,InsAVL(4,vacioAB()))));
-    EsAVL(a) ? puts("Si") : puts("No");
-    a = InsAVL(42,a);
-    ImpElem(raiz(a));
-    EsAVL(a) ? puts("Si") : puts("No");
-    //a = HazAVL(a);
+    Elem e;
+    AVL x = vacioAB();
+
+    for (e = 1; e <= 100; e++)
+    {
+        x = InsAVL(e, x);
+        printf("%d\n", FactBal(x));
+    }
+
+    return 0;
 }

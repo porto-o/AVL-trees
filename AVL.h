@@ -2,11 +2,6 @@
 
 typedef ArBB AVL;
 
-int absoluto(int);
-int EsAVL(AVL);
-int FactBal(AVL);
-AVL HazAVL(ArBB);
-AVL InsAVL(Elem,AVL);
 AVL rotaDer(ArBB);
 AVL rotaIzq(ArBB);
 AVL rotaDerIzq(ArBB);
@@ -29,45 +24,49 @@ int EsAVL(AVL a)
 
 int FactBal(AVL a) { return Altura(izqAB(a)) - Altura(derAB(a)); }
 
-
-AVL HazAVL(ArBB a) 
-{ 
-    if(absoluto(FactBal(a)) > 1)
+AVL HazAVL(ArBB a)
+{
+    if (absoluto(FactBal(a)) > 1)
     {
-        if(EsAVL(izqAB(a)) && EsAVL(derAB(a)))
+        if (EsAVL(izqAB(a)) && EsAVL(derAB(a)))
         {
-            if(FactBal(a) > 1)
+            // Entonces ambos son avl y tenemos 2 situaciones
+            if (FactBal(a) > 1)
             {
-                if(FactBal(izqAB(a)) > 0)
-                    return rotaDer(a);
-                else if(FactBal(izqAB(a)) < 0)
-                    return rotaDerIzq(a);
+                // Desbalanceo por la izquierda
+                if (FactBal(izqAB(a)) > 0)
+                    a = rotaDer(a);
+                else if (FactBal(izqAB(a)) < 0)
+                    a = rotaDerIzq(a);
             }
-            else if(FactBal(a) < -1)
+            else if (FactBal(a) < -1)
             {
-                if(FactBal(derAB(a)) < 0)
-                    return rotaIzq(a);
-                else if(FactBal(derAB(a)) > 0)
-                    return rotaIzqDer(a);
+                // Desbalanceo por la derecha
+                if (FactBal(derAB(a)) < 0)
+                    a = rotaIzq(a);
+                else if (FactBal(derAB(a)) > 0)
+                    a = rotaIzqDer(a);
             }
         }
         else
         {
-            if(EsAVL(izqAB(a)))
-                return consAB(raiz(a),izqAB(a),HazAVL(derAB(a)));
-            else if(EsAVL(derAB(a)))
-                return consAB(raiz(a),HazAVL(izqAB(a)),derAB(a));
+            // Alguno de los subarboles dejó de ser avl y se tienen 2 posibildiades
+            if (EsAVL(izqAB(a)))
+                a = consAB(raiz(a), izqAB(a), HazAVL(derAB(a)));
+            else if (EsAVL(derAB(a)))
+                a = consAB(raiz(a), HazAVL(izqAB(a)), derAB(a));
         }
     }
-    else if(FactBal(a) <= 1)
+    else if (FactBal(a) <= 1)
     {
-        if(EsAVL(izqAB(a)))
-            return consAB(raiz(a),izqAB(a),HazAVL(a));
-        else if(EsAVL(derAB(a)))
-            return consAB(raiz(a),HazAVL(izqAB(a)),derAB(a));
-    }    
-    
-    return a; 
+        // Se cumple que el absoluto es <=1
+        if (EsAVL(izqAB(a)))
+            a = consAB(raiz(a), izqAB(a), HazAVL(derAB(a)));
+        else if (EsAVL(derAB(a)))
+            a = consAB(raiz(a), HazAVL(izqAB(a)), derAB(a));
+    }
+
+    return a;
 }
 
 AVL InsAVL(Elem e, AVL a)
